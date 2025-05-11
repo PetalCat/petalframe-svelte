@@ -1,12 +1,10 @@
-# Build stage
-FROM node:24-alpine AS builder
+# Stage 1: Build the Svelte app
+FROM node:20 AS builder
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
 COPY . .
+RUN npm install
 RUN npm run build
 
-# Production stage
-FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Stage 2: Serve with Caddy
+FROM caddy:alpine
+COPY --from=builder /app/dist /usr/share/caddy
