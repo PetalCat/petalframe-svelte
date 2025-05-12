@@ -1,3 +1,4 @@
+<!-- Gallery.svelte -->
 <script>
   import { onMount } from "svelte";
   import { getMe, fetchAvatarBlob } from "../lib/api.js";

@@ -1,3 +1,4 @@
+<!-- Media.svelte -->
 <script>
   import { onMount } from "svelte";
   import { getMedia } from "./media.js";
