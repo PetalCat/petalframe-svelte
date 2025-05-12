@@ -25,7 +25,7 @@
 
 {#if Object.keys(mediaItems).length > 0}
   {#each Object.entries(mediaItems).sort((a, b) => {
-    const parse = (label) => {
+    const parse = (/** @type {string} */ label) => {
       const [month, year] = label.split(" ");
       const monthIndex = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].indexOf(month);
       return new Date(Number(year), monthIndex);
