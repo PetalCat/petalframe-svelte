@@ -28,14 +28,19 @@
 <main class="auth-container">
   <label>
     API Base:
-    <input type="text" bind:value={apiBase} on:change={updateApiBase} />
+    <input type="text" bind:value={apiBase} onchange={updateApiBase} />
   </label>
 </main>
 
 <main class="auth-container">
   <h1 class="title">PetalFrame</h1>
   <h2 class="subtitle">{isRegister ? "Register" : "Login"}</h2>
-  <form on:submit|preventDefault={handleAuth}>
+  <form
+    onsubmit={async (event) => {
+      event.preventDefault();
+      await handleAuth();
+    }}
+  >
     <label>
       Username:
       <input type="text" bind:value={username} required />
@@ -53,7 +58,8 @@
     {isRegister ? "Already have an account?" : "Don't have an account?"}
     <a
       href="#"
-      on:click|preventDefault={() => {
+      onclick={(event) => {
+        event.preventDefault();
         isRegister = !isRegister;
       }}>{isRegister ? "Login here" : "Register here"}</a
     >

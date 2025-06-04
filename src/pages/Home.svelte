@@ -242,18 +242,7 @@
     justify-content: left;
     height: 25%;
   }
-  .albumicon {
-    height: 27px;
-    width: height;
-    margin-left: 5%;
-    /* change svg color */
-    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg)
-      brightness(100%) contrast(100%);
-  }
-  .albumtext {
-    font-size: 24px;
-    padding-left: 3%;
-  }
+
   :global(#albumcontainer) {
     display: flex;
     justify-content: center;

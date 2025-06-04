@@ -1,14 +1,17 @@
 <!-- LazyMedia.svelte -->
 <script>
-  import { onMount } from "svelte";
+  import { onMount, createEventDispatcher } from "svelte";
   import { fetchMedia } from "./api.js";
 
   export let filename = "";
   export let alt = "";
+  export let startIndex = 0;
 
   let src = null;
   let observer;
   let el;
+
+  const dispatch = createEventDispatcher();
 
   onMount(() => {
     observer = new IntersectionObserver(async ([entry]) => {
@@ -19,8 +22,8 @@
         } catch (err) {
           console.warn("Preview load failed, trying fallback:", filename);
           const original = filename
-            .replace(/^preview_/, "") // remove preview_ prefix
-            .replace(/\.jpg$/, ".mp4"); // fallback to full file
+            .replace(/^preview_/, "")
+            .replace(/\.jpg$/, ".mp4");
           try {
             src = await fetchMedia(original);
           } catch (fallbackErr) {
@@ -31,9 +34,13 @@
     });
     if (el) observer.observe(el);
   });
+
+  const handleClick = () => {
+    dispatch("open", { index: startIndex }); // 👈 Emit event with index
+  };
 </script>
 
-<div class="media-item" bind:this={el}>
+<div class="media-item" bind:this={el} on:click={handleClick}>
   {#if src}
     <img {src} {alt} />
   {/if}
@@ -46,6 +53,7 @@
     overflow: hidden;
     border-radius: 6px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
   }
   img {
     width: 100%;

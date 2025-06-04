@@ -43,3 +43,48 @@ export const getMedia = async (scope = "global", user = null, album = null) => {
     return {};
   }
 };
+
+import { fetchMedia } from "./api.js";
+
+// Util to format timestamps into "Month YYYY"
+function getMonthYear(timestamp) {
+  const date = new Date(timestamp * 1000);
+  return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+}
+
+// Group and sort media by date_taken
+export function groupMediaByMonth(mediaList) {
+  if (!Array.isArray(mediaList)) {
+    console.warn("Expected mediaList to be an array, got:", mediaList);
+    return {};
+  }
+
+  const grouped = {};
+
+  for (const item of mediaList) {
+    const timestamp = item.date_taken || item.timestamp || 0;
+    const date = new Date(timestamp * 1000);
+    const label = date.toLocaleDateString("en-US", {
+      month: "long",
+      year: "numeric",
+    });
+
+    if (!grouped[label]) grouped[label] = [];
+    grouped[label].push(item);
+  }
+
+  for (const label in grouped) {
+    grouped[label].sort(
+      (a, b) => (b.date_taken || b.timestamp) - (a.date_taken || a.timestamp)
+    );
+  }
+
+  return grouped;
+}
+
+// Optionally flatten media sorted by date for lightbox
+export function flattenMedia(mediaList) {
+  return [...mediaList].sort(
+    (a, b) => (b.date_taken || b.timestamp) - (a.date_taken || a.timestamp)
+  );
+}
